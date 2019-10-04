@@ -1,9 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 
-const Login = () => <div>PAGINA DE LOGIN</div>
-const Album = () => <div>Album</div>
-const Albums = () => <div>Busca de albuns</div>
+import { Login, Album, Albums } from '../components'
 
 import ROUTES from './patch'
 
@@ -16,7 +14,7 @@ const {
 const Routes = () => (
   <BrowserRouter>
     <Switch>
-      <Route path={ALBUM} component={Albums} />
+      <Route path={ALBUM} component={Album} />
       <Route path={`${ALBUM}/:album`} component={Album} />
       <Route path={ALBUMS} component={Albums} />
       <Route path={`${ALBUMS}/:artist`} component={Albums} />
