@@ -28,20 +28,18 @@ export const BigText = styled.span
 //   text-align: center;
 //   color: #FAFAFA;
 // `
-// export const BigText = styled.span
-// `
-//   font-weight: regular;
-//   font-size: 18px;
-//   text-align: right;
-//   color: #999999;
-// `
-// export const BigText = styled.span
-// `
-//   font-weight: regular;
-//   font-size: 18px;
-//   text-align: left;
-//   color: #FAFAFA;
-// `
+// font-weight: regular;
+// text-align: right;
+export const BigTextGrey = `
+  font-size: 18px;
+  color: #999999;
+`
+// font-weight: regular;
+// text-align: left;
+export const BigTextWhite = `
+  font-size: 18px;
+  color: #FAFAFA;
+`
 export const MediumText = styled.span
 `
   font-weight: regular;
@@ -49,11 +47,10 @@ export const MediumText = styled.span
   text-align: left;
   color: #FAFAFA;
 `
-export const LittleText = styled.span
-`
-  font-weight: regular;
+// font-weight: regular;
+// text-align: center;
+export const LittleText = `
   font-size: 14px;
-  text-align: center;
   color: #999999;
 `
 // export const LittleText = styled.span

@@ -36,7 +36,6 @@ const Albums = () => {
 
   return (
     <>
-      <Title>TELA DE PESQUISA POR ALBUNS E HISTORICO DE PESQUISA</Title>
       <div>Busque por artistas, álbuns ou músicas</div>
       <div>
         <input

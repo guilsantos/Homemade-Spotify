@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
+import { FlexContainer, AlbumName, ArtistName, MusicList, Music, Index, Name, Duration } from './Album.style'
 import { Title } from "../../configs/theme";
 import { getAlbumById } from "../../services";
 
@@ -15,7 +16,6 @@ const Album = () => {
 
   return (
     <>
-      <Title>TELA DE DETALHE DO ALBUM COM LISTAGEM DE MUSICAS</Title>
       <div>
         <button
           onClick={() =>
@@ -28,20 +28,22 @@ const Album = () => {
         </button>
       </div>
       {results && (
-        <div>
+        <FlexContainer>
           <div>
             <img src={results.images[1].url} />
-            <div>{results.name}</div>
-            <div>{results.artists[0].name}</div>
+            <AlbumName>{results.name}</AlbumName>
+            <ArtistName>{results.artists[0].name}</ArtistName>
           </div>
-          <div>
+          <MusicList>
             {results.tracks.items.map((track, index) => (
-              <div key={track.id}>
-                {index + 1} - {track.name} - {track.duration_ms}
-              </div>
+              <Music key={track.id}>
+                <Index>{index + 1}.</Index>
+                <Name>{track.name}</Name>
+                <Duration>{track.duration_ms}</Duration>
+              </Music>
             ))}
-          </div>
-        </div>
+          </MusicList>
+        </FlexContainer>
       )}
     </>
   );
