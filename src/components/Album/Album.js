@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
-import { FlexContainer, AlbumName, ArtistName, MusicList, Music, Index, Name, Duration } from './Album.style'
-import { Title } from "../../configs/theme";
+import {
+  FlexContainer,
+  AlbumName,
+  ArtistName,
+  MusicList,
+  Music,
+  Index,
+  Name,
+  Duration
+} from "./Album.style";
 import { getAlbumById } from "../../services";
 
 const Album = () => {
@@ -11,7 +19,11 @@ const Album = () => {
   const [results, setResults] = useState();
 
   useEffect(() => {
-    getAlbumById(album).then(data => setResults(data));
+    getAlbumById(album).then(data => {
+      data.error && data.error.status === 401
+        ? history.push("/login")
+        : setResults(data);
+    });
   }, []);
 
   return (

@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import { useDebounce } from "../../utils";
 import { getAlbums } from "../../services";
-import { Title } from "../../configs/theme";
+import {
+  SearchCaption,
+  SearchContainer,
+  SearchInput,
+  SearchResponse,
+  AlbumContainer,
+  Album,
+  AlbumName,
+  ArtistName
+} from "./Albums.style";
 
 const Albums = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,8 +29,10 @@ const Albums = () => {
       history.replace(`/albums/${findParameter}`);
       setIsSearching(true);
       getAlbums(findParameter).then(albums => {
-        setIsSearching(false);
-        setResults(albums);
+        setIsSearching(false)
+        albums.error && albums.error.status === 401
+        ? history.push("/login")
+        : setResults(albums)
       });
     } else {
       setResults([]);
@@ -36,33 +47,29 @@ const Albums = () => {
 
   return (
     <>
-      <div>Busque por artistas, álbuns ou músicas</div>
-      <div>
-        <input
+      <SearchCaption>Busque por artistas, álbuns ou músicas</SearchCaption>
+      <SearchContainer>
+        <SearchInput
           placeholder="Comece a escrever..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
         />
-      </div>
-      {searchTerm ? (
-        <div>Resultados encontrados para "{artist && artist.replace("+", " ")}"</div>
-      ) : (
-        <div>Álbuns buscados recentemente</div>
-      )}
-      <div>
+      </SearchContainer>
+      <SearchResponse>
+        {searchTerm
+          ? `Resultados encontrados para "${artist &&
+              artist.replace("+", " ")}"`
+          : "Álbuns buscados recentemente"}
+      </SearchResponse>
+      <AlbumContainer>
         {results.map(album => (
-          <div onClick={() => history.push(`/album/${album.id}`)}>
-            <img src={album.images[2].url} />
-            <span>{album.name}</span>
-            <span>{album.artists[0].name}</span>
-          </div>
+          <Album onClick={() => history.push(`/album/${album.id}`)}>
+            <img width="200px" src={album.images[1].url} />
+            <AlbumName>{album.name}</AlbumName>
+            <ArtistName>{album.artists[0].name}</ArtistName>
+          </Album>
         ))}
-      </div>
-      <div>Álbuns buscados recentemente</div>
-      <div>FILEIRA DE ÁLBUNs</div>
-
-      <span>Em pesquisa {isSearching && "PESQUISANDOOOO"}</span>
-      <span>RESULTADO DA REQUISIÇÃO: </span>
+      </AlbumContainer>
     </>
   );
 };

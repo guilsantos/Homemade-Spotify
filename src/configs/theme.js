@@ -28,12 +28,12 @@ export const BigText = styled.span
 //   text-align: center;
 //   color: #FAFAFA;
 // `
+// export const BigTextGrey = `
 // font-weight: regular;
 // text-align: right;
-export const BigTextGrey = `
-  font-size: 18px;
-  color: #999999;
-`
+//   font-size: 18px;
+//   color: #999999;
+// `
 // font-weight: regular;
 // text-align: left;
 export const BigTextWhite = `
@@ -47,12 +47,12 @@ export const MediumText = styled.span
   text-align: left;
   color: #FAFAFA;
 `
+// export const LittleText = `
 // font-weight: regular;
 // text-align: center;
-export const LittleText = `
-  font-size: 14px;
-  color: #999999;
-`
+// font-size: 14px;
+// color: #999999;
+// `
 // export const LittleText = styled.span
 // `
 //   font-weight: regular;

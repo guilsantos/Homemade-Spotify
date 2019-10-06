@@ -1,4 +1,4 @@
-import { token } from '../utils'
+import { token } from "../utils";
 
 const getAlbums = search => {
   const queryString = `q=${search}&type=album&limit=10`;
@@ -12,8 +12,13 @@ const getAlbums = search => {
     .then(res => res.albums.items)
     .catch(error => {
       console.error(error);
-      return [];
+      return {
+        error: {
+          status: 401,
+          message: "Invalid access token"
+        }
+      };
     });
-}
+};
 
-export default getAlbums
+export default getAlbums;

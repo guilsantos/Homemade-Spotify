@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { BigTextGrey, BigTextWhite, LittleText } from '../../configs/theme'
 
 export const FlexContainer = styled.div`
   display: flex;
@@ -7,12 +6,14 @@ export const FlexContainer = styled.div`
 
 export const AlbumName = styled.div`
   text-align: center;
-  ${BigTextWhite}
+  font-size: 18px;
+  color: #FAFAFA;
 `
 
 export const ArtistName = styled.div`
   text-align: center;
-  ${LittleText}
+  font-size: 14px;
+  color: #999999;
 `
 
 export const MusicList = styled.div`
@@ -22,15 +23,18 @@ export const MusicList = styled.div`
 export const Music = styled(FlexContainer)``
 
 export const Index = styled.div `
-  ${BigTextGrey}
+  font-size: 18px;
+  color: #999999;
   width: 32px;
 `
 
 export const Name = styled.div `
-  ${BigTextWhite}
+  font-size: 18px;
+  color: #FAFAFA;
 `
 
 export const Duration = styled.div `
-  ${BigTextGrey}
+  font-size: 18px;
+  color: #999999;
   margin-left: auto;
 `
