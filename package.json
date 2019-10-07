@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/guilsantos/challenge#readme",
   "dependencies": {
+    "dotenv": "^8.1.0",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
     "react-redux": "^7.1.1",
