@@ -1,13 +1,13 @@
 import React from "react";
-import { FlexContainer, ContentContainer } from './Layout.style'
+import { FlexContainer, ImageContainer, ContentContainer } from './Layout.style'
 import spotifyIcon from "../../assets/spotify.png";
 
 const Layout = ({ children }) => {
   return (
     <FlexContainer>
-      <div>
+      <ImageContainer>
         <img src={spotifyIcon} width="48px" />
-      </div>
+      </ImageContainer>
       <ContentContainer>{children}</ContentContainer>
     </FlexContainer>
   );

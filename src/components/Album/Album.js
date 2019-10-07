@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import {
+  ButtonContainer,
+  BackButton,
   FlexContainer,
   AlbumName,
   ArtistName,
@@ -28,8 +30,8 @@ const Album = () => {
 
   return (
     <>
-      <div>
-        <button
+      <ButtonContainer>
+        <BackButton
           onClick={() =>
             history.action === "POP"
               ? history.push("/albums")
@@ -37,8 +39,8 @@ const Album = () => {
           }
         >
           {"< Voltar"}
-        </button>
-      </div>
+        </BackButton>
+      </ButtonContainer>
       {results && (
         <FlexContainer>
           <div>
@@ -47,13 +49,17 @@ const Album = () => {
             <ArtistName>{results.artists[0].name}</ArtistName>
           </div>
           <MusicList>
-            {results.tracks.items.map((track, index) => (
-              <Music key={track.id}>
-                <Index>{index + 1}.</Index>
-                <Name>{track.name}</Name>
-                <Duration>{track.duration_ms}</Duration>
-              </Music>
-            ))}
+            {results.tracks.items.map(
+              (track, index) =>
+                console.log("track", track) || (
+                  <Music key={track.id}>
+                    <Index>{index + 1}.</Index>
+                    <Name>{track.name}</Name>
+                    <Duration>{track.duration_ms}</Duration>
+                    <audio src={track.preview_url} controls />
+                  </Music>
+                )
+            )}
           </MusicList>
         </FlexContainer>
       )}

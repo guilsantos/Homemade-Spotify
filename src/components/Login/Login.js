@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router"
 import { token } from '../../utils'
-import { TokenInput } from './Login.style'
+import { TokenInput, StyledButton } from './Login.style'
 
 const Login = () => {
   const [tokenInput, setTokenInput] = useState("");
@@ -14,13 +14,13 @@ const Login = () => {
         value={tokenInput}
         onChange={e => setTokenInput(e.target.value)}
       />
-      <button disabled={!tokenInput} onClick={() => {
+      <StyledButton disabled={!tokenInput} onClick={() => {
         token.set(tokenInput)
         history.action === "POP"
           ? history.push("/albums")
           : history.goBack()
       }
-      }>Salvar token e ver albuns</button>
+      }>Salvar token e ver albuns</StyledButton>
     </>
   );
 };

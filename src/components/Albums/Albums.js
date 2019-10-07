@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
-import { useDebounce } from "../../utils";
+import { useDebounce, searchHistory } from "../../utils";
 import { getAlbums } from "../../services";
 import {
+  Search,
   SearchCaption,
   SearchContainer,
   SearchInput,
@@ -19,7 +20,6 @@ const Albums = () => {
   let { artist } = useParams();
 
   const [results, setResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -27,12 +27,10 @@ const Albums = () => {
     if (debouncedSearchTerm) {
       let findParameter = debouncedSearchTerm.replace(/\s/g, "+");
       history.replace(`/albums/${findParameter}`);
-      setIsSearching(true);
       getAlbums(findParameter).then(albums => {
-        setIsSearching(false)
         albums.error && albums.error.status === 401
-        ? history.push("/login")
-        : setResults(albums)
+          ? history.push("/login")
+          : setResults(albums);
       });
     } else {
       setResults([]);
@@ -40,6 +38,7 @@ const Albums = () => {
   }, [debouncedSearchTerm]);
 
   useEffect(() => {
+    setResults(searchHistory.get())
     if (artist) {
       setSearchTerm(artist.replace("+", " "));
     }
@@ -47,24 +46,38 @@ const Albums = () => {
 
   return (
     <>
-      <SearchCaption>Busque por artistas, álbuns ou músicas</SearchCaption>
-      <SearchContainer>
-        <SearchInput
-          placeholder="Comece a escrever..."
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-        />
-      </SearchContainer>
-      <SearchResponse>
-        {searchTerm
-          ? `Resultados encontrados para "${artist &&
-              artist.replace("+", " ")}"`
-          : "Álbuns buscados recentemente"}
-      </SearchResponse>
+      <Search>
+        <SearchCaption>Busque por artistas, álbuns ou músicas</SearchCaption>
+        <SearchContainer>
+          <SearchInput
+            placeholder="Comece a escrever..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+        </SearchContainer>
+        <SearchResponse>
+          {searchTerm
+            ? `Resultados encontrados para "${artist &&
+                artist.replace("+", " ")}"`
+            : "Álbuns buscados recentemente"}
+        </SearchResponse>
+      </Search>
       <AlbumContainer>
         {results.map(album => (
-          <Album onClick={() => history.push(`/album/${album.id}`)}>
-            <img width="200px" src={album.images[1].url} />
+          <Album
+            onClick={() => {
+              searchHistory.addAlbum(
+                {
+                  id: album.id,
+                  images: album.images,
+                  name: album.name,
+                  artists: album.artists
+                }
+              )
+              history.push(`/album/${album.id}`);
+            }}
+          >
+            <img width="150px" src={album.images[1].url} />
             <AlbumName>{album.name}</AlbumName>
             <ArtistName>{album.artists[0].name}</ArtistName>
           </Album>
