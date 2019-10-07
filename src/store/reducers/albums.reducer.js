@@ -1,8 +1,10 @@
 const initialState = {
   albums: [],
+  albumsCache: {},
   isFething: false,
   searchTerm: "",
-  error: false
+  error: false,
+  fromCache: false
 };
 
 export const ACTION_TYPES = {
@@ -11,7 +13,8 @@ export const ACTION_TYPES = {
 
   GET_ALBUMS_REQUEST: "GET_ALBUMS_REQUEST",
   GET_ALBUMS_SUCCESS: "GET_ALBUMS_SUCCESS",
-  GET_ALBUMS_ERROR: "GET_ALBUMS_ERROR"
+  GET_ALBUMS_ERROR: "GET_ALBUMS_ERROR",
+  GET_ALBUMS_FROM_CACHE: "GET_ALBUMS_FROM_CACHE"
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -37,8 +40,13 @@ export default (state = initialState, { type, payload }) => {
     case ACTION_TYPES.GET_ALBUMS_SUCCESS: {
       return {
         ...state,
-        albums: [...payload],
-        isFething: false
+        albums: [...payload.albums],
+        albumsCache: {
+          ...state.albumsCache,
+          [payload.query]: [...payload.albums]
+        },
+        isFething: false,
+        fromCache: false
       };
     }
     case ACTION_TYPES.GET_ALBUMS_ERROR: {
@@ -47,6 +55,14 @@ export default (state = initialState, { type, payload }) => {
         error: true,
         isFething: false
       };
+    }
+    case ACTION_TYPES.GET_ALBUMS_FROM_CACHE: {
+      return {
+        ...state,
+        albums: payload,
+        isFething: false,
+        fromCache: true
+      }
     }
 
     default: {

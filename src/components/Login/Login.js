@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { TokenInput, StyledButton } from "./Login.style";
 import { token } from "../../utils";
 import { clearError } from "../../store/reducers/albums.reducer";
+import PATCH from "../../routes/patch";
+import { messages } from "../../configs";
 
 const Login = () => {
   const [tokenInput, setTokenInput] = useState("");
@@ -13,7 +15,7 @@ const Login = () => {
   return (
     <>
       <TokenInput
-        placeholder="Insira seu token Spotify"
+        placeholder={messages.login.tokenInputPlaceholder}
         value={tokenInput}
         onChange={e => setTokenInput(e.target.value)}
       />
@@ -22,10 +24,12 @@ const Login = () => {
         onClick={() => {
           token.set(tokenInput);
           clearError()(dispatch);
-          history.action === "POP" ? history.push("/albums") : history.goBack();
+          history.action === "POP"
+            ? history.push(PATCH.ALBUMS)
+            : history.goBack();
         }}
       >
-        Salvar token e ver albuns
+        {messages.login.button}
       </StyledButton>
     </>
   );

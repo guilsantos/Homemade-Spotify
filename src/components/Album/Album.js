@@ -13,8 +13,10 @@ import {
   Name,
   Duration
 } from "./Album.style";
+import PATCH from '../../routes/patch'
 import { getAlbum, clear } from "../../store/reducers/album.reducer";
 import { formatMinutes } from "../../utils";
+import { messages } from "../../configs";
 
 const Album = () => {
   let history = useHistory();
@@ -29,8 +31,7 @@ const Album = () => {
     getAlbum(album)(dispatch);
   }, []);
 
-  console.log('selectedAlbum', selectedAlbum)
-  if (error) history.push("/login");
+  if (error) history.push(PATCH.LOGIN);
 
 
   return (
@@ -40,11 +41,11 @@ const Album = () => {
           onClick={() => {
             clear()(dispatch);
             history.action === "POP"
-              ? history.push("/albums")
+              ? history.push(PATCH.ALBUMS)
               : history.goBack();
           }}
         >
-          {"< Voltar"}
+          {messages.album.backButton}
         </BackButton>
       </ButtonContainer>
       {selectedAlbum && (
@@ -53,7 +54,7 @@ const Album = () => {
             <img src={selectedAlbum.images[1].url} />
             <AlbumName>{selectedAlbum.name}</AlbumName>
             <ArtistName>{selectedAlbum.artists[0].name}</ArtistName>
-            <audio src={preview.preview_url} controls />
+            {preview && <audio src={preview.preview_url} autoplay controls />}
           </div>
           <MusicList>
             {selectedAlbum.tracks.items.map((track, index) => (

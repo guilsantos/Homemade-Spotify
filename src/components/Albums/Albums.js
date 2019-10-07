@@ -1,11 +1,6 @@
 import React, { useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import { useDebounce, searchHistory } from "../../utils";
-import {
-  setSearchTerm,
-  getAlbums
-} from "../../store/reducers/albums.reducer";
 import {
   Search,
   SearchCaption,
@@ -17,6 +12,10 @@ import {
   AlbumName,
   ArtistName
 } from "./Albums.style";
+import { useDebounce, searchHistory } from "../../utils";
+import { setSearchTerm, getAlbums } from "../../store/reducers/albums.reducer";
+import PATCH from "../../routes/patch";
+import { messages } from "../../configs";
 
 const Albums = () => {
   let history = useHistory();
@@ -25,16 +24,14 @@ const Albums = () => {
   const dispatch = useDispatch();
   const { albums, searchTerm, error } = useSelector(({ albums }) => albums);
 
-  if (error) history.push("/login")
+  if (error) history.push(PATCH.LOGIN);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {
-    if (debouncedSearchTerm) {
-      let findParameter = debouncedSearchTerm.replace(/\s/g, "+");
-      history.replace(`/albums/${findParameter}`);
-      getAlbums(findParameter)(dispatch);
-    }
+    let findParameter = debouncedSearchTerm.replace(/\s/g, "+");
+    history.replace(`${PATCH.ALBUMS}/${findParameter}`);
+    if (debouncedSearchTerm) getAlbums(findParameter)(dispatch);
   }, [debouncedSearchTerm]);
 
   useEffect(() => {
@@ -43,43 +40,35 @@ const Albums = () => {
     }
   }, []);
 
-  const displayAlbums = searchTerm ? albums : searchHistory.get()
+  const displayAlbums = searchTerm ? albums : searchHistory.get();
+
+  const selectAlbum = album => {
+    searchHistory.addAlbum(album);
+    history.push(`${PATCH.ALBUM}/${album.id}`);
+  };
 
   return (
     <>
       <Search>
-        <SearchCaption>Busque por artistas, álbuns ou músicas</SearchCaption>
+        <SearchCaption>{messages.albums.searchInputCaption}</SearchCaption>
         <SearchContainer>
           <SearchInput
-            placeholder="Comece a escrever..."
+            placeholder={messages.albums.searchInputPlaceholder}
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)(dispatch)}
           />
         </SearchContainer>
         <SearchResponse>
-          {console.log("artist", artist)}
           {searchTerm
-            ? `Resultados encontrados para "${artist ?
-                artist.replace("+", " ") : ""}"`
-            : "Álbuns buscados recentemente"}
+            ? messages.albums.searchResponse(artist)
+            : messages.albums.searchResponseRecently}
         </SearchResponse>
       </Search>
 
       {displayAlbums && (
         <AlbumContainer>
           {displayAlbums.map(album => (
-            <Album
-              key={album.id}
-              onClick={() => {
-                searchHistory.addAlbum({
-                  id: album.id,
-                  images: album.images,
-                  name: album.name,
-                  artists: album.artists
-                });
-                history.push(`/album/${album.id}`);
-              }}
-            >
+            <Album key={album.id} onClick={() => selectAlbum(album)}>
               <img width="150px" src={album.images[1].url} />
               <AlbumName>{album.name}</AlbumName>
               <ArtistName>{album.artists[0].name}</ArtistName>
