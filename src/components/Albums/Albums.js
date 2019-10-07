@@ -33,14 +33,15 @@ const Albums = () => {
           : setResults(albums);
       });
     } else {
-      setResults([]);
+      setResults(searchHistory.get())
     }
   }, [debouncedSearchTerm]);
 
   useEffect(() => {
-    setResults(searchHistory.get())
     if (artist) {
       setSearchTerm(artist.replace("+", " "));
+    } else {
+      setResults(searchHistory.get())
     }
   }, []);
 
@@ -65,6 +66,7 @@ const Albums = () => {
       <AlbumContainer>
         {results.map(album => (
           <Album
+            key={album.id}
             onClick={() => {
               searchHistory.addAlbum(
                 {

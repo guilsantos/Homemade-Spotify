@@ -22,6 +22,10 @@ export const FlexContainer = styled.div`
   display: flex;
   padding: 32px;
   padding-top: 0;
+
+  @media (max-width: 740px) {
+    flex-direction: column;
+  }
 `
 
 export const AlbumName = styled.div`
@@ -54,6 +58,10 @@ export const ArtistName = styled.div`
 export const MusicList = styled.div`
   width: 100%;
   padding-left: 64px;
+
+  @media (max-width: 740px) {
+    padding-left: 0;
+  }
 `
 
 export const Music = styled.div`
