@@ -42,7 +42,7 @@ export const ArtistName = styled.div`
   font-size: 14px;
   color: #999999;
   padding-top: 12px;
-  padding-top: 12px;
+  padding-bottom: 12px;
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -58,7 +58,17 @@ export const MusicList = styled.div`
 
 export const Music = styled.div`
   display: flex;
-  padding-bottom: 24px;
+  padding: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  :hover {
+    background-color: #000000;
+    opacity: 50%;
+  }
+  ${({ active }) => active && `
+    background-color: #000000;
+    opacity: 50%;
+  `}
 `
 
 export const Index = styled.div `

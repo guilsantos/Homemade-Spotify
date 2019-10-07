@@ -19,6 +19,7 @@ const Album = () => {
   let { album } = useParams();
 
   const [results, setResults] = useState();
+  const [preview, setPreview] = useState("");
 
   useEffect(() => {
     getAlbumById(album).then(data => {
@@ -47,19 +48,20 @@ const Album = () => {
             <img src={results.images[1].url} />
             <AlbumName>{results.name}</AlbumName>
             <ArtistName>{results.artists[0].name}</ArtistName>
+            <audio src={preview.preview_url} controls/>
           </div>
           <MusicList>
-            {results.tracks.items.map(
-              (track, index) =>
-                console.log("track", track) || (
-                  <Music key={track.id}>
-                    <Index>{index + 1}.</Index>
-                    <Name>{track.name}</Name>
-                    <Duration>{track.duration_ms}</Duration>
-                    <audio src={track.preview_url} controls />
-                  </Music>
-                )
-            )}
+            {results.tracks.items.map((track, index) => (
+              <Music
+                key={track.id}
+                onClick={() => setPreview(track)}
+                active={track.id === preview.id}
+              >
+                <Index>{index + 1}.</Index>
+                <Name>{track.name}</Name>
+                <Duration>{track.duration_ms}</Duration>
+              </Music>
+            ))}
           </MusicList>
         </FlexContainer>
       )}
