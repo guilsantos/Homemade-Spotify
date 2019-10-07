@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router"
-import { token } from '../../utils'
-import { TokenInput, StyledButton } from './Login.style'
+import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
+import { TokenInput, StyledButton } from "./Login.style";
+import { token } from "../../utils";
+import { clearError } from "../../store/reducers/albums.reducer";
 
 const Login = () => {
   const [tokenInput, setTokenInput] = useState("");
-  let history = useHistory()
+  let history = useHistory();
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -14,13 +17,16 @@ const Login = () => {
         value={tokenInput}
         onChange={e => setTokenInput(e.target.value)}
       />
-      <StyledButton disabled={!tokenInput} onClick={() => {
-        token.set(tokenInput)
-        history.action === "POP"
-          ? history.push("/albums")
-          : history.goBack()
-      }
-      }>Salvar token e ver albuns</StyledButton>
+      <StyledButton
+        disabled={!tokenInput}
+        onClick={() => {
+          token.set(tokenInput);
+          clearError()(dispatch);
+          history.action === "POP" ? history.push("/albums") : history.goBack();
+        }}
+      >
+        Salvar token e ver albuns
+      </StyledButton>
     </>
   );
 };

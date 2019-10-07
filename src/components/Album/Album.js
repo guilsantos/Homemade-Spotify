@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
 import {
   ButtonContainer,
   BackButton,
@@ -12,46 +13,50 @@ import {
   Name,
   Duration
 } from "./Album.style";
-import { getAlbumById } from "../../services";
+import { getAlbum, clear } from "../../store/reducers/album.reducer";
+import { formatMinutes } from "../../utils";
 
 const Album = () => {
   let history = useHistory();
   let { album } = useParams();
 
-  const [results, setResults] = useState();
+  const dispatch = useDispatch();
+  const { album: selectedAlbum, error } = useSelector(store => store.album);
+
   const [preview, setPreview] = useState("");
 
   useEffect(() => {
-    getAlbumById(album).then(data => {
-      data.error && data.error.status === 401
-        ? history.push("/login")
-        : setResults(data);
-    });
+    getAlbum(album)(dispatch);
   }, []);
+
+  console.log('selectedAlbum', selectedAlbum)
+  if (error) history.push("/login");
+
 
   return (
     <>
       <ButtonContainer>
         <BackButton
-          onClick={() =>
+          onClick={() => {
+            clear()(dispatch);
             history.action === "POP"
               ? history.push("/albums")
-              : history.goBack()
-          }
+              : history.goBack();
+          }}
         >
           {"< Voltar"}
         </BackButton>
       </ButtonContainer>
-      {results && (
+      {selectedAlbum && (
         <FlexContainer>
           <div>
-            <img src={results.images[1].url} />
-            <AlbumName>{results.name}</AlbumName>
-            <ArtistName>{results.artists[0].name}</ArtistName>
-            <audio src={preview.preview_url} controls/>
+            <img src={selectedAlbum.images[1].url} />
+            <AlbumName>{selectedAlbum.name}</AlbumName>
+            <ArtistName>{selectedAlbum.artists[0].name}</ArtistName>
+            <audio src={preview.preview_url} controls />
           </div>
           <MusicList>
-            {results.tracks.items.map((track, index) => (
+            {selectedAlbum.tracks.items.map((track, index) => (
               <Music
                 key={track.id}
                 onClick={() => setPreview(track)}
@@ -59,7 +64,7 @@ const Album = () => {
               >
                 <Index>{index + 1}.</Index>
                 <Name>{track.name}</Name>
-                <Duration>{track.duration_ms}</Duration>
+                <Duration>{formatMinutes(track.duration_ms)}</Duration>
               </Music>
             ))}
           </MusicList>

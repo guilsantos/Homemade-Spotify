@@ -9,15 +9,9 @@ const getAlbums = search => {
     }
   })
     .then(res => res.json())
-    .then(res => res.albums.items)
     .catch(error => {
       console.error(error);
-      return {
-        error: {
-          status: 401,
-          message: "Invalid access token"
-        }
-      };
+      return []
     });
 };
 
