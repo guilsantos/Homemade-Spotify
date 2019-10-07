@@ -12,6 +12,14 @@ const Login = () => {
   let history = useHistory();
   const dispatch = useDispatch();
 
+  const saveToken = () => {
+    token.set(tokenInput);
+    clearError()(dispatch);
+    history.action === "POP"
+      ? history.push(PATCH.ALBUMS)
+      : history.goBack();
+  }
+
   return (
     <>
       <TokenInput
@@ -21,13 +29,7 @@ const Login = () => {
       />
       <StyledButton
         disabled={!tokenInput}
-        onClick={() => {
-          token.set(tokenInput);
-          clearError()(dispatch);
-          history.action === "POP"
-            ? history.push(PATCH.ALBUMS)
-            : history.goBack();
-        }}
+        onClick={saveToken}
       >
         {messages.login.button}
       </StyledButton>
