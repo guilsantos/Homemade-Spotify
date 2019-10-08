@@ -31,4 +31,7 @@ export const StyledButton = styled.button`
     background-color: #000000;
     opacity: 50%;
   }
+  :focus {
+    outline: 0;
+  }
 `

@@ -16,6 +16,9 @@ export const BackButton = styled.button`
     background-color: #000000;
     opacity: 50%;
   }
+  :focus {
+    outline: 0;
+  }
 `
 
 export const FlexContainer = styled.div`
@@ -57,7 +60,7 @@ export const ArtistName = styled.div`
 
 export const Audio = styled.audio`
   :focus {
-    outline: 0;
+    outline: none;
   }
 `
 
