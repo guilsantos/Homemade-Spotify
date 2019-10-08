@@ -12,7 +12,7 @@ const Routes = () => (
     <BrowserRouter>
       <Switch>
         <Route path={ALBUM} exact component={Album} />
-        <Route path={`${ALBUM}/:album`} component={Album} />
+        <Route path={`${ALBUM}/:albumId`} component={Album} />
         <Route path={ALBUMS} exact component={Albums} />
         <Route path={`${ALBUMS}/:artist`} component={Albums} />
         <Route path={LOGIN} exact component={Login} />

@@ -3,12 +3,14 @@ const initialState = {
   albumCache: {},
   isFething: false,
   error: false,
-  fromCache: false
+  fromCache: false,
+  preview: {}
 };
 
 export const ACTION_TYPES = {
   CLEAR_ERROR: "CLEAR_ERROR",
   CLEAR: "CLEAR",
+  SET_ALBUM_PREVIEW: "SET_ALBUM_PREVIEW",
 
   GET_ALBUM_REQUEST: "GET_ALBUM_REQUEST",
   GET_ALBUM_SUCCESS: "GET_ALBUM_SUCCESS",
@@ -22,13 +24,19 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         error: false
-      }
+      };
     }
     case ACTION_TYPES.CLEAR: {
       return {
         ...initialState,
         albumCache: state.albumCache
-      }
+      };
+    }
+    case ACTION_TYPES.SET_ALBUM_PREVIEW: {
+      return {
+        ...state,
+        preview: payload
+      };
     }
     case ACTION_TYPES.GET_ALBUM_REQUEST: {
       return {
@@ -61,7 +69,7 @@ export default (state = initialState, { type, payload }) => {
         album: payload,
         isFething: false,
         fromCache: true
-      }
+      };
     }
 
     default: {
@@ -75,9 +83,13 @@ export const getAlbum = payload => dispatch => {
 };
 
 export const clearError = () => dispatch => {
-  dispatch({ type: ACTION_TYPES.CLEAR_ERROR })
-}
+  dispatch({ type: ACTION_TYPES.CLEAR_ERROR });
+};
 
-export const clear = () => dispatch => {
-  dispatch({ type: ACTION_TYPES.CLEAR })
-}
+export const clear = dispatch => {
+  dispatch({ type: ACTION_TYPES.CLEAR });
+};
+
+export const setAlbumPreview = payload => dispatch => {
+  dispatch({ type: ACTION_TYPES.SET_ALBUM_PREVIEW, payload });
+};

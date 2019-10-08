@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -7,60 +7,60 @@ import {
   FlexContainer,
   AlbumName,
   ArtistName,
+  Audio,
   MusicList,
   Music,
   Index,
   Name,
   Duration
 } from "./Album.style";
-import PATCH from '../../routes/patch'
-import { getAlbum, clear } from "../../store/reducers/album.reducer";
+import PATCH from "../../routes/patch";
+import {
+  getAlbum,
+  clear,
+  setAlbumPreview
+} from "../../store/reducers/album.reducer";
 import { formatMinutes } from "../../utils";
-import { messages } from "../../configs";
+import { MESSAGES } from "../../configs";
 
 const Album = () => {
   let history = useHistory();
-  let { album } = useParams();
+  let { albumId } = useParams();
 
   const dispatch = useDispatch();
-  const { album: selectedAlbum, error } = useSelector(store => store.album);
+  const { album, error, preview } = useSelector(({ album }) => album);
 
-  const [preview, setPreview] = useState("");
+  const goBack = () => {
+    clear(dispatch);
+    history.action === "POP" ? history.push(PATCH.ALBUMS) : history.goBack();
+  };
 
   useEffect(() => {
-    getAlbum(album)(dispatch);
+    getAlbum(albumId)(dispatch);
   }, []);
 
   if (error) history.push(PATCH.LOGIN);
 
-
   return (
     <>
       <ButtonContainer>
-        <BackButton
-          onClick={() => {
-            clear()(dispatch);
-            history.action === "POP"
-              ? history.push(PATCH.ALBUMS)
-              : history.goBack();
-          }}
-        >
-          {messages.album.backButton}
-        </BackButton>
+        <BackButton onClick={goBack}>{MESSAGES.album.backButton}</BackButton>
       </ButtonContainer>
-      {selectedAlbum && (
+      {album && (
         <FlexContainer>
           <div>
-            <img src={selectedAlbum.images[1].url} />
-            <AlbumName>{selectedAlbum.name}</AlbumName>
-            <ArtistName>{selectedAlbum.artists[0].name}</ArtistName>
-            {preview && <audio src={preview.preview_url} autoplay controls />}
+            <img src={album.images[1].url} />
+            <AlbumName>{album.name}</AlbumName>
+            <ArtistName>{album.artists[0].name}</ArtistName>
+            {preview && preview.preview_url && (
+              <Audio src={preview.preview_url} autoplay controls />
+            )}
           </div>
           <MusicList>
-            {selectedAlbum.tracks.items.map((track, index) => (
+            {album.tracks.items.map((track, index) => (
               <Music
                 key={track.id}
-                onClick={() => setPreview(track)}
+                onClick={() => setAlbumPreview(track)(dispatch)}
                 active={track.id === preview.id}
               >
                 <Index>{index + 1}.</Index>

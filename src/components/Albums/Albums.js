@@ -15,7 +15,7 @@ import {
 import { useDebounce, searchHistory } from "../../utils";
 import { setSearchTerm, getAlbums } from "../../store/reducers/albums.reducer";
 import PATCH from "../../routes/patch";
-import { messages } from "../../configs";
+import { MESSAGES } from "../../configs";
 
 const Albums = () => {
   let history = useHistory();
@@ -24,9 +24,14 @@ const Albums = () => {
   const dispatch = useDispatch();
   const { albums, searchTerm, error } = useSelector(({ albums }) => albums);
 
-  if (error) history.push(PATCH.LOGIN);
-
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  const displayAlbums = searchTerm ? albums : searchHistory.get();
+
+  const selectAlbum = album => {
+    searchHistory.addAlbum(album);
+    history.push(`${PATCH.ALBUM}/${album.id}`);
+  };
 
   useEffect(() => {
     let findParameter = debouncedSearchTerm.replace(/\s/g, "+");
@@ -36,32 +41,27 @@ const Albums = () => {
 
   useEffect(() => {
     if (artist) {
-      setSearchTerm(artist.replace("+", " "))(dispatch);
+      setSearchTerm(artist.replace(/\+/g, " "))(dispatch);
     }
   }, []);
 
-  const displayAlbums = searchTerm ? albums : searchHistory.get();
-
-  const selectAlbum = album => {
-    searchHistory.addAlbum(album);
-    history.push(`${PATCH.ALBUM}/${album.id}`);
-  };
+  if (error) history.push(PATCH.LOGIN);
 
   return (
     <>
       <Search>
-        <SearchCaption>{messages.albums.searchInputCaption}</SearchCaption>
+        <SearchCaption>{MESSAGES.albums.searchInputCaption}</SearchCaption>
         <SearchContainer>
           <SearchInput
-            placeholder={messages.albums.searchInputPlaceholder}
+            placeholder={MESSAGES.albums.searchInputPlaceholder}
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)(dispatch)}
           />
         </SearchContainer>
         <SearchResponse>
           {searchTerm
-            ? messages.albums.searchResponse(artist)
-            : messages.albums.searchResponseRecently}
+            ? MESSAGES.albums.searchResponse(artist)
+            : MESSAGES.albums.searchResponseRecently}
         </SearchResponse>
       </Search>
 

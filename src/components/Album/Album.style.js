@@ -55,6 +55,12 @@ export const ArtistName = styled.div`
   -webkit-box-orient: vertical;
 `
 
+export const Audio = styled.audio`
+  :focus {
+    outline: 0;
+  }
+`
+
 export const MusicList = styled.div`
   width: 100%;
   padding-left: 64px;

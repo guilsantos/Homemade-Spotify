@@ -1,5 +1,5 @@
-import messages from './messages'
+import MESSAGES from './messages'
 
 export {
-  messages
+  MESSAGES
 }

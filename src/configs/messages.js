@@ -1,4 +1,4 @@
-const messages = {
+const MESSAGES = {
   login: {
     tokenInputPlaceholder: "Insira seu token Spotify",
     button: "Salvar token e ver albuns"
@@ -10,9 +10,9 @@ const messages = {
     searchInputCaption: "Busque por artistas, álbuns ou músicas",
     searchInputPlaceholder: "Comece a escrever...",
     searchResponse: artist =>
-      `Resultados encontrados para "${artist ? artist.replace("+", " ") : ""}"`,
+      `Resultados encontrados para "${artist ? artist.replace(/\+/g, " ") : ""}"`,
     searchResponseRecently: "Álbuns buscados recentemente"
   }
 };
 
-export default messages;
+export default MESSAGES;

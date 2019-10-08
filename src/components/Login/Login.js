@@ -1,37 +1,36 @@
-import React, { useState } from "react";
+import React from "react";
 import { useHistory } from "react-router";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { TokenInput, StyledButton } from "./Login.style";
 import { token } from "../../utils";
 import { clearError } from "../../store/reducers/albums.reducer";
+import { setTokenInput } from "../../store/reducers/login.reducer";
 import PATCH from "../../routes/patch";
-import { messages } from "../../configs";
+import { MESSAGES } from "../../configs";
 
 const Login = () => {
-  const [tokenInput, setTokenInput] = useState("");
   let history = useHistory();
+
   const dispatch = useDispatch();
+  const { tokenInput } = useSelector(({ login }) => login);
 
   const saveToken = () => {
     token.set(tokenInput);
     clearError()(dispatch);
-    history.action === "POP"
+    history.action === "POP" || history.action === "REPLACE"
       ? history.push(PATCH.ALBUMS)
       : history.goBack();
-  }
+  };
 
   return (
     <>
       <TokenInput
-        placeholder={messages.login.tokenInputPlaceholder}
+        placeholder={MESSAGES.login.tokenInputPlaceholder}
         value={tokenInput}
-        onChange={e => setTokenInput(e.target.value)}
+        onChange={e => setTokenInput(e.target.value)(dispatch)}
       />
-      <StyledButton
-        disabled={!tokenInput}
-        onClick={saveToken}
-      >
-        {messages.login.button}
+      <StyledButton disabled={!tokenInput} onClick={saveToken}>
+        {MESSAGES.login.button}
       </StyledButton>
     </>
   );
